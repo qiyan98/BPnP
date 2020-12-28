@@ -340,6 +340,7 @@ def batch_project(P, pts3d, K, angle_axis=True):
     pts3d_cam = pts3d_h.matmul(PM.transpose(-2,-1))
     pts2d_proj = pts3d_cam.matmul(K.t())
     S = pts2d_proj[:,:, 2].view(bs, n, 1)
+    S = S.clamp_(min=0.1)
     pts2d_pro = pts2d_proj[:,:,0:2].div(S)
 
     return pts2d_pro
